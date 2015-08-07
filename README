@@ -1,0 +1,132 @@
+makepro                                                               Apr 2012
+                                                               by littleshamoo
+
+About makepro
+
+    Makepro  was  originally  inspired  by  Prof.  Chung-Yang Huang's makefile
+    environment  which manages packages, automatically generates dependencies,
+    compiles  C/C++  codes,  and   archives object codes into library. Makepro
+    started  out  with the need of addtional automatic supports on lex/yacc, a
+    more  customizable  layout,  package  dependency  handling,  and  external
+    library  support.  It has undergone a few years of changes and was finally
+    rewritten in Nov 2011 and published its first internal version.
+
+    Makepro currently supports automactic compile and dependency generation on
+    C/C++,  Qt  (Q_OBJECT .h),  CUDA  (.cu),  lex (.l), and yacc (.y) sources,
+    customizable  package  compiling  flags, and customizable archived library
+    and shared library building.
+
+
+Usage
+
+    Executing makepro-<version>.run will produce a directory named 'makepro/'.
+    Under makepro/ there are four makefile related files.
+
+        Makefile  - the main makefile which is reponsible for adding packages,
+                    compiling packges, and building libraries.
+        common.mk - common environment layout and compiler flags.
+        macro.mk  - macro routines and functions.
+        setup.mk  - customizable packages, libraries, and modes.
+
+    Below describes the steps for creating packages.
+
+    1)  Customize  layout. To customize layout under packages, edit 'INC_DIR',
+        'SRC_DIR', and 'BIN_DIR' variables in 'common.mk'. 'INC_DIR' indicates
+        where  header files are placed. 'SRC_DIR' indicates where source files
+        are  placed.  Supported source file suffixes are .c, .cpp, .l, .y, and
+        .cu.  'BIN_DIR' indicates where binaries are placed. Default is 'bin'.
+        These  three  variables  can  be  set  to '.', which means in the same
+        directory of the package.
+        To  customize top level layouts, edit 'PKG_TOP', 'LIB_TOP', 'INC_TOP',
+        and  'BIN_TOP' variables in 'common.mk'. These represent the top level
+        package, library, include, and binary directories, respectively.
+
+
+    2)  Add new packages. To add new packages, type the following.
+
+            $ make add ADD="<pkg>..."
+
+        Package names can contain hierachy.
+
+            i.e. $ make add ADD="util/common_util util/graph_util"
+
+        will  create  two  packages  'util/common_util'  and 'util/graph_util'
+        under 'PKG_TOP' directory.
+
+
+    3)  Add  sources.  To  add  sources,  either create new files or just copy
+        source codes from other places to 'SRC_DIR' under each package.
+
+
+    4)  Compile  settings.  Add packages to be compiled to 'PKGS' variables in
+        'setup.mk'.
+
+            i.e. PKGS = util/common_util util/graph_util
+
+        Other settings are described in 'setup.mk'.
+
+
+    5)  Build. To build all packages.
+
+            $ make
+
+        To build specific packages.
+
+            $ make PKG="<pkg>..."
+
+        To build all libraries.
+
+            $ make lib
+
+        To clean all generated files.
+
+            $ make clean
+
+        To clean all generated files of specific packages.
+
+            $ make clean PKG="<pkg>..."
+
+        To clean all libs.
+
+            $ make libclean
+
+        To clean all generated files and directories.
+
+            $ make distclean
+
+
+Version history
+
+    * v1.2.6: Fix a bug concerning cleaning multi-mode binaries.
+    * v1.2.5: Fix a bug of not including common flags.
+    * v1.2.4: Fix  a  bug  when  MODES is not defined would cause binaries not
+              removed.
+    * v1.2.3: Fix a bug of generating dependency files.
+    * v1.2.2: Top package directory can now be empty.
+    * v1.2.1: Dependent  packages  will no longer be cleaned when packages are
+              explicitly specified.
+    * v1.2.0: A  major  revision  which  adds compile mode support and cleanup
+              redundant  functions  and  macros. An additional flag VERBOSE is
+              also added for debugging.
+
+    * v1.1.4: Fix a bug of generating cuda dependency files.
+    * v1.1.3: Fix a bug linking .cu binaries
+    * v1.1.2: Fix a bug of finding Qt header files
+    * v1.1.1: Important bug fix on dependency files
+    * v1.1:   Bug fixes. Added support for Qt and CUDA sources.
+    * v1.0:   Initial internal release. Tested the project of B. R. Chen.
+
+
+License
+
+    makepro currently is limited to LaDS(II) internal use only.
+
+
+Contact
+
+    The  makefiles  are  written by littleshamoo. Any suggestions and comments
+    are welcomed.
+
+        f97943076@ntu.edu.tw
+
+
